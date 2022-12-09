@@ -1,4 +1,4 @@
-package com.restcontroller.dto;
+package com.paymentsystem.rest.dto;
 
 import com.domain.entity.Status;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class TransactionData {
 
     private String senderIban;
 
-    private LocalDateTime dateOfTransaction;
+    private LocalDateTime dateTimeOfTransaction;
 
     private double amount;
 

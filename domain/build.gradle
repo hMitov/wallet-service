@@ -1,3 +1,7 @@
-dependencies {
-    implementation project(":rest-controller")
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = false
 }

@@ -1,10 +1,10 @@
-package com.restcontroller.dto;
+package com.domain.value;
 
 import com.domain.entity.Currency;
 import lombok.Data;
 
 @Data
-public class BankAccountData {
+public class VBankAccountData {
 
     private String iban;
 

@@ -1,9 +1,14 @@
-package com.restcontroller.port;
+package com.paymentsystem.rest.port;
 
 import com.domain.services.WalletDomainService;
+import com.domain.value.VBankAccount;
+import com.domain.value.VBankAccountData;
+import com.domain.value.VCustomer;
+import com.domain.value.VTransactionData;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restcontroller.adapter.RestAdapter;
-import com.restcontroller.dto.*;
+import com.paymentsystem.rest.adapter.RestAdapter;
+import com.paymentsystem.rest.dto.Transaction;
+import com.paymentsystem.rest.dto.TransactionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -34,25 +39,25 @@ public class WalletRestPort {
 
     public Transaction createTransaction() throws Exception {
 
-        List<BankAccountData> bankAccounts =
+        List<VBankAccountData> vBankAccounts =
                 Arrays.stream(Objects.requireNonNull(webClientBilling.get().uri("/bank-accounts")
                                 .retrieve().bodyToMono(Object[].class).block()))
                         .map(object -> new ObjectMapper()
-                .convertValue(object, BankAccount.class)).map(BankAccount::getData).collect(Collectors.toList());
+                                .convertValue(object, VBankAccount.class)).map(VBankAccount::getData).collect(Collectors.toList());
 
-        List<Customer> customers =
+        List<VCustomer> vCustomers =
                 Arrays.stream(Objects.requireNonNull(webClientCustomers.get().uri("/customers")
                                 .retrieve().bodyToMono(Object[].class).block()))
                         .map(object -> new ObjectMapper()
-                .convertValue(object, Customer.class)).collect(Collectors.toList());
+                                .convertValue(object, VCustomer.class)).collect(Collectors.toList());
 
-        TransactionInfo transactionInfo = new TransactionInfo();
-        transactionInfo.setRecipientIban("BG443322");
-        transactionInfo.setSenderIban("BG178907");
-        transactionInfo.setAmount(200.00);
+        VTransactionData vData = new VTransactionData();
+        vData.setRecipientIban("BG443322");
+        vData.setSenderIban("BG178907");
+        vData.setAmount(200.00);
 
         TransactionData createdTransaction = restAdapter
-                .convertTransactionValueToDto(domainService.createTransaction(bankAccounts, customers, transactionInfo));
+                .convertTransactionValueToDto(domainService.createTransaction(vBankAccounts, vCustomers, vData));
 
         return webClientBilling.post().uri("/transaction-create")
                 .body(Mono.just(createdTransaction), TransactionData.class)

@@ -1,4 +1,4 @@
-package com.restcontroller.dto;
+package com.paymentsystem.rest.dto;
 
 import lombok.Data;
 
