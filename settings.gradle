@@ -1,5 +1,4 @@
 rootProject.name = 'wallet-service'
-include 'domain'
 include 'rest-controller'
-include 'configuration'
+include 'domain'
 
